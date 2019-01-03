@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # This project specific files
-survey_results_public.csv
+*.csv
 
 # User-specific files
 *.suo

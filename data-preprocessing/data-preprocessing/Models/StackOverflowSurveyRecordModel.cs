@@ -146,5 +146,6 @@
         public bool HasValidSalary => ConvertedSalary != "NA";
         public bool HasValidYearsWorked => YearsCoding != "NA" && YearsCodingProf != "NA";
         public bool HasAdditionalEducation => EducationTypes != "NA";
+        public bool HasValidDevelopmentTypes => DevType != "NA";
     }
 }

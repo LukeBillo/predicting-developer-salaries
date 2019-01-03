@@ -11,11 +11,11 @@ namespace DataPreprocessing.Models
     // While I imagine there is a better way of
     // doing this, this was the quickest and
     // easiest way to throw stuff together.
-    public static class ModelConversionHelpers
+    public static class IntermediateModelConversionHelpers
     {
-        public static ProcessedSurveyRecordModel ProcessStackOverflowSurveyRecordModel(StackOverflowSurveyRecordModel model)
+        public static IntermediateProcessedRecordModel ProcessStackOverflowSurveyRecordModel(StackOverflowSurveyRecordModel model)
         {
-            return new ProcessedSurveyRecordModel
+            return new IntermediateProcessedRecordModel
             {
                 Id = model.Respondent,
                 Country = ParseCountryString(model.Country),
@@ -64,7 +64,7 @@ namespace DataPreprocessing.Models
 
         private static List<DevelopmentType> ParseDevelopmentTypes(string developmentType)
         {
-            var developmentTypes = developmentType.Split(',');
+            var developmentTypes = developmentType.Split(';');
             var devTypesList = new List<DevelopmentType>();
 
             var unknowns = new List<string>();
@@ -80,6 +80,12 @@ namespace DataPreprocessing.Models
                 }
                 catch (ArgumentException)
                 {
+                    if (trimmedType == "Csuiteexecutive(CEO,CTO,etc.)")
+                    {
+                        devTypesList.Add(DevelopmentType.CSuiteExecutive);
+                        continue;
+                    }
+
                     unknowns.Add(trimmedType);
                 }
             }
