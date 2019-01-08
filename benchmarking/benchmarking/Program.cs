@@ -1,17 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using Accord.Controls;
+using System.Runtime.InteropServices;
 using benchmarks.Helpers;
 using Benchmarks.Models;
 using Benchmarks.Models.Enums;
 using CsvHelper;
+using Encog;
+using Encog.App.Analyst;
+using Encog.App.Analyst.CSV.Normalize;
+using Encog.App.Analyst.Wizard;
+using Encog.Engine.Network.Activation;
+using Encog.MathUtil.Randomize.Generate;
+using Encog.ML;
 using Encog.ML.Data.Versatile;
 using Encog.ML.Data.Versatile.Columns;
+using Encog.ML.Data.Versatile.Division;
+using Encog.ML.Data.Versatile.Normalizers.Strategy;
 using Encog.ML.Data.Versatile.Sources;
+using Encog.ML.Factory;
+using Encog.ML.Model;
+using Encog.Neural.Data.Basic;
+using Encog.Neural.Networks;
+using Encog.Neural.Networks.Layers;
+using Encog.Neural.Networks.Training;
+using Encog.Neural.Networks.Training.Propagation.Resilient;
+using Encog.Persist;
+using Encog.Util.CSV;
+using Encog.Util.Normalize;
+using Encog.Util.Normalize.Input;
+using Encog.Util.Normalize.Segregate.Index;
 
 namespace benchmarking
 {
@@ -19,41 +38,79 @@ namespace benchmarking
     {
         static void Main(string[] args)
         {
-            var records = new List<ProcessedSurveyRecordModel>();
-            var boolEnumerableTypeConverter = new EnumerableTypeConverter<bool>();
+            var dataset = new VersatileMLDataSet(new CSVDataSource("survey_processed_results.csv", true, CSVFormat.English));
 
-            using (var textReader = File.OpenText("survey_processed_results.csv"))
+            ColumnDefinition outputColumnDefinition = null;
+
+            using (TextReader textReader = File.OpenText("survey_processed_results.csv"))
             {
-                var csvReader = new CsvReader(textReader);
+                var headers = textReader.ReadLine();
+                var splitHeaders = headers.Replace("\"", "").Split(',');
 
-                // reads headers
-                csvReader.Read();
-                csvReader.ReadHeader();
-
-                while (csvReader.Read())
+                for (var i = 0; i < splitHeaders.Length; i++)
                 {
-                    records.Add(new ProcessedSurveyRecordModel
+                    var header = splitHeaders[i];
+
+                    if (header.Contains("Id"))
                     {
-                        Id = csvReader.GetField<int>("Id"),
-                        YearsCoding = csvReader.GetField<YearBand>("YearsCoding"),
-                        YearsProfessionalCoding = csvReader.GetField<YearBand>("YearsProfessionalCoding"),
-                        Salary = csvReader.GetField<decimal>("Salary"),
-                        HasAdditionalEducation = csvReader.GetField<bool>("HasAdditionalEducation"),
-                        Country = csvReader.GetField<IEnumerable<bool>>("Country", boolEnumerableTypeConverter),
-                        StudentStatus = csvReader.GetField<IEnumerable<bool>>("StudentStatus", boolEnumerableTypeConverter),
-                        EmploymentStatus = csvReader.GetField<IEnumerable<bool>>("EmploymentStatus", boolEnumerableTypeConverter),
-                        EducationLevel = csvReader.GetField<IEnumerable<bool>>("EducationLevel", boolEnumerableTypeConverter),
-                        UndergraduateMajor = csvReader.GetField<IEnumerable<bool>>("UndergraduateMajor", boolEnumerableTypeConverter),
-                        DevelopmentTypes = csvReader.GetField<IEnumerable<bool>>("DevelopmentTypes", boolEnumerableTypeConverter)
-                    });
+                        dataset.DefineSourceColumn(header, i, ColumnType.Ignore);
+                        continue;
+                    }
+
+                    if (header.Contains("Salary"))
+                    {
+                        outputColumnDefinition = dataset.DefineSourceColumn(header, i, ColumnType.Continuous);
+                        continue;
+                    }
+
+                    if (header.Contains("Years"))
+                    {
+                        var yearsColumn = dataset.DefineSourceColumn(header, i, ColumnType.Ordinal);
+                        yearsColumn.DefineClass(new [] { "ZeroToTwo",
+                            "ThreeToFive",
+                            "SixToEight",
+                            "NineToEleven",
+                            "TwelveToFourteen",
+                            "FifteenToSeventeen",
+                            "EighteenToTwenty",
+                            "TwentyOneToTwentyThree",
+                            "TwentyFourToTwentySix",
+                            "TwentySevenToTwentyNine",
+                            "ThirtyPlus" });
+
+                        continue;
+                    }
+
+                    var booleanColumn = dataset.DefineSourceColumn(header, i, ColumnType.Ordinal);
+                    booleanColumn.DefineClass(new [] { "False", "True" });
                 }
             }
 
-            var data = new VersatileMLDataSet(new CSVDataSource("survey_processed_results.csv", true, ','));
+            dataset.DefineSingleOutputOthersInput(outputColumnDefinition);
+            dataset.Analyze();
 
-            data.DefineSourceColumn("Id", 0, ColumnType.Ignore);
-            data.DefineSourceColumn("YearsCoding", 1, ColumnType.Ordinal);
-            data.DefineSourceColumn("YearsProfessionalCoding", 2, ColumnType.Ordinal);
+            var model = new EncogModel(dataset);
+            model.SelectMethod(dataset, MLMethodFactory.TypeSVM);
+            model.Report = new ConsoleStatusReportable();
+
+            dataset.Normalize();
+            model.HoldBackValidation(0.3, true, 1001);
+            model.SelectTrainingType(dataset);
+            var bestMethod = model.Crossvalidate(5, true) as IMLRegression;
+
+            Console.WriteLine($"Training error: {model.CalculateError(bestMethod, model.TrainingDataset)}");
+            Console.WriteLine($"Validation error: {model.CalculateError(bestMethod, model.ValidationDataset)}");
+
+            var dataDivisions = new List<DataDivision> { new DataDivision(0.5), new DataDivision(0.5) };
+            dataset.Divide(dataDivisions, true, new MersenneTwisterGenerateRandom());
+
+            foreach (var data in dataDivisions[0].Dataset)
+            {
+                var result = bestMethod.Compute(data.Input);
+                Console.WriteLine($"Result: {result}, Actual: {data.Ideal}");
+            }
+
+            EncogDirectoryPersistence.SaveObject(new FileInfo("SvmModel_NoNormalisation.eg"), bestMethod);
         }
     }
 }

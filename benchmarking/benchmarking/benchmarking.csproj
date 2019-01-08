@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="Helpers\EnumerableTypeConverter.cs" />
     <Compile Include="Models\Enums\YearBand.cs" />
     <Compile Include="Models\ProcessedSurveyRecordModel.cs" />
@@ -63,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="normalized_results.ega">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="survey_processed_results.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

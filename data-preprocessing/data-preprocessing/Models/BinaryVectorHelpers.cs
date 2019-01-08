@@ -57,7 +57,7 @@ namespace DataPreprocessing.Models
 
         public static List<bool> CreateBinaryVector(UndergraduateMajor major)
         {
-            var enumList = Enum.GetValues(typeof(Country));
+            var enumList = Enum.GetValues(typeof(UndergraduateMajor));
             var binaryVector = new List<bool>(new bool[enumList.Length]);
 
             var majorIndex = (int)major;
@@ -68,7 +68,7 @@ namespace DataPreprocessing.Models
 
         public static List<bool> CreateBinaryVector(List<DevelopmentType> devTypes)
         {
-            var enumList = Enum.GetValues(typeof(Country));
+            var enumList = Enum.GetValues(typeof(DevelopmentType));
             var binaryVector = new List<bool>(new bool[enumList.Length]);
 
             foreach (var developmentType in devTypes)
