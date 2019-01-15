@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B6E418BE-7331-45E9-B2BC-40C44C9113E2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>benchmarking</RootNamespace>
-    <AssemblyName>benchmarking</AssemblyName>
+    <RootNamespace>MachineLearning</RootNamespace>
+    <AssemblyName>MachineLearning</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

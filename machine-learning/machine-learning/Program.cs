@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using Encog;
+using Encog.App.Analyst;
+using Encog.App.Analyst.Wizard;
 using Encog.MathUtil.Randomize.Generate;
 using Encog.ML;
+using Encog.ML.Data;
 using Encog.ML.Data.Versatile;
 using Encog.ML.Data.Versatile.Columns;
 using Encog.ML.Data.Versatile.Division;
@@ -26,6 +29,12 @@ namespace benchmarking
             // new SvmModel(svmDataset).Run();
 
             var nnDataset = CreateDataset();
+
+            foreach (var column in nnDataset.NormHelper.SourceColumns)
+            {
+                Console.WriteLine($"Column: {column.Name} | Mean: {column.Mean} | Stdev: {column.Sd} | High: {column.High} | Low: {column.Low}");
+            }
+
             new NeuralNetworkModel(nnDataset).Run();
         }
 
@@ -83,6 +92,7 @@ namespace benchmarking
             }
 
             dataset.DefineSingleOutputOthersInput(outputColumnDefinition);
+
             dataset.Analyze();
 
             return dataset;
