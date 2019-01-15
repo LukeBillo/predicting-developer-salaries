@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Benchmarks.Models.Enums;
+using DataInsights.Models;
 using MathNet.Numerics.Statistics;
 
 namespace DataInsights.Helpers

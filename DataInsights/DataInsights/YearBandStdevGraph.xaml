@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DataInsights.YearBandGraph"
+﻿<UserControl x:Class="DataInsights.YearBandStdevGraph"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,7 +10,7 @@
     <Grid>
         <wpf:CartesianChart Series="{Binding YearBandAverages}" LegendLocation="Right">
             <wpf:CartesianChart.AxisY>
-                <wpf:Axis Title="Salary"></wpf:Axis>
+                <wpf:Axis Title="Standard Deviation"></wpf:Axis>
             </wpf:CartesianChart.AxisY>
             <wpf:CartesianChart.AxisX>
                 <wpf:Axis Title="Year Band" Labels="{Binding YearBands}"></wpf:Axis>

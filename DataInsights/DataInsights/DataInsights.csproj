@@ -48,11 +48,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,10 +73,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\CountryInsights.cs" />
     <Compile Include="Helpers\YearBandDataInsights.cs" />
+    <Compile Include="Models\Country.cs" />
     <Compile Include="Models\YearBand.cs" />
-    <Compile Include="YearBandGraph.xaml.cs">
-      <DependentUpon>YearBandGraph.xaml</DependentUpon>
+    <Compile Include="YearBandStdevGraph.xaml.cs">
+      <DependentUpon>YearBandStdevGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="YearBandAvgsGraph.xaml.cs">
+      <DependentUpon>YearBandAvgsGraph.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -88,7 +95,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="YearBandGraph.xaml">
+    <Page Include="YearBandStdevGraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="YearBandAvgsGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

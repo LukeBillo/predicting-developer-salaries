@@ -1,33 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Benchmarks.Models.Enums;
 using DataInsights.Helpers;
+using DataInsights.Models;
 using LiveCharts;
 using LiveCharts.Wpf;
 
 namespace DataInsights
 {
     /// <summary>
-    /// Interaction logic for YearBandGraph.xaml
+    /// Interaction logic for YearBandAvgsGraph.xaml
     /// </summary>
-    public partial class YearBandGraph : UserControl
+    public partial class YearBandAvgsGraph : UserControl
     {
         public SeriesCollection YearBandAverages { get; set; }
         public string[] YearBands { get; set; }
 
-        public YearBandGraph()
+        public YearBandAvgsGraph()
         {
             InitializeComponent();
 

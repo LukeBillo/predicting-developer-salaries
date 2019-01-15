@@ -1,4 +1,4 @@
-﻿namespace Benchmarks.Models.Enums
+﻿namespace DataInsights.Models
 {
     public enum YearBand
     {

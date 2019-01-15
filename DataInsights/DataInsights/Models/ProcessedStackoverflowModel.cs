@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Benchmarks.Models.Enums;
-
-namespace DataInsights
+﻿namespace DataInsights.Models
 {
     public class ProcessedStackoverflowModel
     {
