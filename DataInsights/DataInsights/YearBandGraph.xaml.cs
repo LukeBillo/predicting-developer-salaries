@@ -22,10 +22,10 @@ namespace DataInsights
     /// <summary>
     /// Interaction logic for YearBandGraph.xaml
     /// </summary>
-    public partial class YearBandGraph
+    public partial class YearBandGraph : UserControl
     {
-        public SeriesCollection YearBandAverages;
-        public List<string> YearBands = new List<string>(); 
+        public SeriesCollection YearBandAverages { get; set; }
+        public string[] YearBands { get; set; }
 
         public YearBandGraph()
         {
@@ -40,10 +40,13 @@ namespace DataInsights
             var averageNonProfessionalList = (Dictionary<YearBand, decimal>) averages.NonProfessionalAverages;
             var nonprofessionalValues = averageNonProfessionalList.Select(r => r.Value);
 
+            var yearBands = new List<string>();
             foreach (YearBand yearBand in Enum.GetValues(typeof(YearBand)))
             {
-                YearBands.Add(yearBand.ToString());
+                yearBands.Add(yearBand.ToString());
             }
+
+            YearBands = yearBands.ToArray();
 
             YearBandAverages = new SeriesCollection
             {
@@ -58,6 +61,8 @@ namespace DataInsights
                     Values = new ChartValues<decimal>(nonprofessionalValues)
                 }
             };
+
+            DataContext = this;
         }
     }
 }
