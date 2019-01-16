@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataInsights"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <local:YearBandStdevGraph></local:YearBandStdevGraph>
-    </Grid>
+        Title="Data Insights" Height="350" Width="525">
+        <Grid>
+            <local:DevTypeAvgsGraph></local:DevTypeAvgsGraph>
+        </Grid>
 </Window>

@@ -7,15 +7,31 @@ namespace DataInsights.Helpers
 {
     public class CountryInsights
     {
-        public dynamic GetAverageByCountry(List<ProcessedStackoverflowModel> models)
+        public static Dictionary<string, decimal> GetAverageByCountry(List<ProcessedStackoverflowModel> models)
         {
-            foreach (Country country in Enum.GetValues(typeof(Country)))
-            {
-                models.Select(model => model
-                                           .GetType()
-                                           .GetProperty(country.ToString())
-                                           .GetValue() == true);
+            var countrySalaries = new Dictionary<string, decimal>();
 
+            foreach (var country in Enum.GetNames(typeof(Country)))
+            {
+                var countryField = typeof(ProcessedStackoverflowModel).GetProperty(country);
+
+                var runningSalaryTotal = 0.0M;
+                var totalModelsAdded = 0;
+
+                foreach (var model in models)
+                {
+                    if (!(bool) countryField.GetValue(model)) continue;
+
+                    runningSalaryTotal += model.Salary;
+                    totalModelsAdded += 1;
+                }
+
+                if (totalModelsAdded == 0) continue;
+
+                countrySalaries.Add(country, (runningSalaryTotal / totalModelsAdded));
             }
+
+            return countrySalaries;
+        }
     }
 }

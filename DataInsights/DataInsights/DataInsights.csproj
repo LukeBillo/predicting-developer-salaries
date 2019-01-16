@@ -13,6 +13,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +36,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.8.0\lib\net46\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.12.1.1\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
@@ -73,9 +87,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CountryAvgsGraph.xaml.cs">
+      <DependentUpon>CountryAvgsGraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\CountryInsights.cs" />
+    <Compile Include="DevTypeAvgsGraph.xaml.cs">
+      <DependentUpon>DevTypeAvgsGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\DevTypeInsights.cs" />
     <Compile Include="Helpers\YearBandDataInsights.cs" />
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\DevelopmentType.cs" />
     <Compile Include="Models\YearBand.cs" />
     <Compile Include="YearBandStdevGraph.xaml.cs">
       <DependentUpon>YearBandStdevGraph.xaml</DependentUpon>
@@ -83,6 +105,14 @@
     <Compile Include="YearBandAvgsGraph.xaml.cs">
       <DependentUpon>YearBandAvgsGraph.xaml</DependentUpon>
     </Compile>
+    <Page Include="CountryAvgsGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DevTypeAvgsGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -137,4 +167,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
+  </Target>
 </Project>

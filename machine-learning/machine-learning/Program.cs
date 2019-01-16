@@ -15,6 +15,8 @@ using Encog.ML.Factory;
 using Encog.ML.Model;
 using Encog.Persist;
 using Encog.Util.CSV;
+using MachineLearning;
+using MachineLearning.Helpers;
 
 namespace benchmarking
 {
@@ -22,6 +24,8 @@ namespace benchmarking
     {
         static void Main(string[] args)
         {
+            var benchmark = new MultivariateLinearRegressionBenchmarkModel(new ProcessedStackoverflowModelReader().ProcessedStackoverflowModels);
+            Console.WriteLine($"Benchmark Error: {benchmark.Error}");
             // a new dataset is created for each model so that
             // normalisation from different models does
             // not affect other machine learning models.
