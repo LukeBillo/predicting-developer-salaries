@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Accord;
+using Accord.MachineLearning.VectorMachines;
+using Accord.MachineLearning.VectorMachines.Learning;
+using Accord.Statistics.Kernels;
 using CsvHelper;
 using DataPreprocessing.Models;
+using DataPreprocessing.Models.Enums;
 
 namespace DataPreprocessing
 {
@@ -49,12 +54,37 @@ namespace DataPreprocessing
             {
                 var csvWriter = new CsvWriter(textWriter);
                 csvWriter.WriteHeader<ProcessedSurveyRecordModel>();
-                csvWriter.WriteField("Country");
-                csvWriter.WriteField("StudentStatus");
-                csvWriter.WriteField("EmploymentStatus");
-                csvWriter.WriteField("EducationLevel");
-                csvWriter.WriteField("UndergraduateMajor");
-                csvWriter.WriteField("DevelopmentTypes");
+
+                foreach (var country in Enum.GetValues(typeof(Country)))
+                {
+                    csvWriter.WriteField(country);
+                }
+
+                foreach (var status in Enum.GetValues(typeof(StudentStatus)))
+                {
+                    csvWriter.WriteField(status);
+                }
+
+                foreach (var status in Enum.GetValues(typeof(EmploymentStatus)))
+                {
+                    csvWriter.WriteField(status);
+                }
+
+                foreach (var level in Enum.GetValues(typeof(EducationLevel)))
+                {
+                    csvWriter.WriteField(level);
+                }
+
+                foreach (var major in Enum.GetValues(typeof(UndergraduateMajor)))
+                {
+                    csvWriter.WriteField(major);
+                }
+
+                foreach (var type in Enum.GetValues(typeof(DevelopmentType)))
+                {
+                    csvWriter.WriteField(type);
+                }
+
                 csvWriter.NextRecord();
 
                 foreach (var model in processedModels)
